@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/public/styles.css">
+</head>
+<body>
+  <header class="top">
+    <strong>EPSILOCK User Node</strong>
+    <% if (bodyView !== 'login') { %>
+      <form method="post" action="/logout"><button type="submit">Logout</button></form>
+    <% } %>
+  </header>
+  <main class="wrap">
+    <%- include(bodyView, data || {}) %>
+  </main>
+  <script src="/public/chat.js"></script>
+</body>
+</html>

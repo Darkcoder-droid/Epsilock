@@ -1,13 +1,14 @@
 {
-  "name": "epsilock-phase1",
+  "name": "epsilock-phase-demo",
   "version": "1.0.0",
-  "description": "EPSILOCK Phase 1 - Single-node secure bidirectional WebSocket chat",
-  "main": "server.js",
+  "description": "EPSILOCK multi-node TLS/WSS attacker-demo phase",
+  "main": "main-node/server.js",
   "scripts": {
-    "start": "node server.js",
-    "start:main": "node server.js",
-    "start:backup": "node backup-node/server.js",
-    "dev": "node server.js",
+    "dev:main": "node main-node/server.js",
+    "dev:node1": "USER_NODE_PORT=${USER_NODE_1_PORT:-3001} NODE_ID=NODE-1 node user-node/server.js",
+    "dev:node2": "USER_NODE_PORT=${USER_NODE_2_PORT:-3002} NODE_ID=NODE-2 node user-node/server.js",
+    "dev:attacker": "ATTACKER_NODE_PORT=${ATTACKER_NODE_PORT:-4001} node attacker-node/server.js",
+    "certs": "bash scripts/generate-dev-certs.sh",
     "seed:admin": "node scripts/seedAdmin.js"
   },
   "dependencies": {

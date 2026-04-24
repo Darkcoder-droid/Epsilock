@@ -1,0 +1,75 @@
+<h1>Attacker Node Dashboard</h1>
+<p class="muted">Separate node-style view for attacker-side packet visibility simulation.</p>
+
+<div class="grid four">
+  <article class="card attacker-card">
+    <h3>Cover Traffic</h3>
+    <p id="coverTrafficEnabledLabel"><%= coverEnabled ? 'ON' : 'OFF' %></p>
+  </article>
+  <article class="card attacker-card">
+    <h3>Interval</h3>
+    <p><span id="coverTrafficIntervalMsLabel"><%= securitySettings.coverTrafficIntervalMs %></span> ms</p>
+  </article>
+  <article class="card attacker-card">
+    <h3>Jitter</h3>
+    <p><span id="coverTrafficJitterMsLabel"><%= securitySettings.coverTrafficJitterMs %></span> ms</p>
+  </article>
+  <article class="card attacker-card">
+    <h3>Ratio</h3>
+    <p><span id="coverTrafficRatioLabel"><%= securitySettings.coverTrafficRatio %></span></p>
+  </article>
+</div>
+
+<section class="card attacker-shell">
+  <div class="row">
+    <a href="/admin/security-settings"><button type="button">Manage Cover Traffic</button></a>
+    <a href="/admin/attacker-demo"><button type="button">Open Comparison View</button></a>
+  </div>
+  <p class="muted mt8">
+    Mode: <strong id="coverTrafficModeLabel"><%= coverEnabled ? 'MIXED / NOISY MODE ACTIVE' : 'CLEAN / ISOLATABLE MODE (COVER OFF)' %></strong>
+  </p>
+</section>
+
+<div class="grid two">
+  <section class="card attacker-stream">
+    <h2>Packet Stream (Latest 40)</h2>
+    <table>
+      <thead><tr><th>Time</th><th>Type</th><th>Cover</th><th>From</th><th>To</th><th>Size</th></tr></thead>
+      <tbody>
+        <% packets.slice(0, 40).forEach((p) => { %>
+          <tr>
+            <td><%= new Date(p.createdAt).toLocaleTimeString() %></td>
+            <td><%= p.type %></td>
+            <td><%= p.isCover ? 'yes' : 'no' %></td>
+            <td><%= p.fromUserId || '-' %></td>
+            <td><%= p.toUserId || '-' %></td>
+            <td><%= p.sizeBytes %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card attacker-stream">
+    <h2>Decryption View (Simulation)</h2>
+    <table>
+      <thead><tr><th>Packet</th><th>Type</th><th>Decrypted View</th></tr></thead>
+      <tbody>
+        <% packets.slice(0, 40).forEach((p) => { %>
+          <tr>
+            <td><%= p.packetId %></td>
+            <td><%= p.type %></td>
+            <td class="small"><%= p.decrypted || '-' %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<section class="card">
+  <h2>Confidence Signal</h2>
+  <p>WITHOUT COVER TRAFFIC: <strong><%= confidenceWithout %></strong></p>
+  <p>WITH COVER TRAFFIC: <strong><%= confidenceWith %></strong></p>
+  <p class="muted">Cover traffic does not replace encryption and does not make the system unhackable.</p>
+</section>

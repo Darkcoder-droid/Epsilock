@@ -1,0 +1,23 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Segoe UI", Tahoma, sans-serif; background: #f4f6fb; color: #12233d; }
+.topbar { background: linear-gradient(135deg, #0c2f58, #154f87); color: #fff; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; }
+.topbar h1 { margin: 0; font-size: 18px; }
+.topbar a { color: #e8f1ff; text-decoration: none; font-weight: 600; }
+.container { max-width: 1280px; margin: 20px auto; padding: 0 14px; }
+.card { background: #fff; border-radius: 12px; padding: 14px; box-shadow: 0 8px 24px rgba(12, 47, 88, 0.1); margin-bottom: 14px; }
+.card h2, .card h3 { margin-top: 0; }
+.grid { display: grid; gap: 12px; }
+.grid.four { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.row { display: flex; gap: 10px; align-items: center; justify-content: space-between; }
+button { border: 0; border-radius: 8px; background: #0c2f58; color: #fff; padding: 8px 12px; cursor: pointer; }
+button:hover { background: #154f87; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th, td { border-bottom: 1px solid #dde4ef; text-align: left; padding: 7px; vertical-align: top; }
+th { background: #ecf2fb; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.small { max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.muted { color: #5b6d87; }
+@media (max-width: 760px) {
+  .row { flex-direction: column; align-items: flex-start; }
+  .small { max-width: 150px; }
+}

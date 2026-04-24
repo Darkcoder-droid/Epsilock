@@ -1,0 +1,39 @@
+<h1>Rooms</h1>
+<section class="card">
+  <form method="post" action="/admin/rooms/create" class="row">
+    <input name="name" placeholder="room name" required>
+    <button type="submit">Create Room</button>
+  </form>
+</section>
+<section class="grid two">
+  <% rooms.forEach((r) => { %>
+    <article class="card">
+      <h3><%= r.name %></h3>
+      <p><code><%= r.roomId %></code></p>
+      <p>Status: <%= r.status %> | Frozen: <%= r.frozen ? 'yes' : 'no' %></p>
+      <% if (r.frozen) { %>
+        <form method="post" action="/admin/rooms/<%= r.roomId %>/unfreeze"><button type="submit">Unfreeze</button></form>
+      <% } else { %>
+        <form method="post" action="/admin/rooms/<%= r.roomId %>/freeze"><button type="submit">Freeze</button></form>
+      <% } %>
+      <form method="post" action="/admin/rooms/<%= r.roomId %>/add-user" class="row compact">
+        <select name="userId" required>
+          <option value="">select user</option>
+          <% users.forEach((u) => { %>
+            <option value="<%= u._id %>"><%= u.username %></option>
+          <% }) %>
+        </select>
+        <button type="submit">Add</button>
+      </form>
+      <div class="mt8">
+        <% (r.participantUserIds || []).forEach((uid) => { %>
+          <form method="post" action="/admin/rooms/<%= r.roomId %>/remove-user" class="row compact">
+            <input type="hidden" name="userId" value="<%= uid %>">
+            <code><%= uid %></code>
+            <button type="submit">Remove</button>
+          </form>
+        <% }) %>
+      </div>
+    </article>
+  <% }) %>
+</section>

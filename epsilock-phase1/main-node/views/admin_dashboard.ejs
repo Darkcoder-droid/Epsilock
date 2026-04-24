@@ -1,0 +1,42 @@
+<h1>Admin Dashboard</h1>
+<div class="grid four">
+  <article class="card"><h3>Users</h3><p><%= stats.users %></p></article>
+  <article class="card"><h3>Rooms</h3><p><%= stats.rooms %></p></article>
+  <article class="card"><h3>Online Nodes</h3><p><%= stats.onlineNodes %></p></article>
+  <article class="card"><h3>Incidents</h3><p><%= stats.incidents %></p></article>
+</div>
+<div class="grid four">
+  <article class="card"><h3>Real Packets</h3><p><%= stats.real %></p></article>
+  <article class="card"><h3>Cover Packets</h3><p><%= stats.cover %></p></article>
+  <article class="card"><h3>Total Packets</h3><p><%= stats.total %></p></article>
+  <article class="card"><h3>Attacker Confidence</h3><p><%= stats.confidence %></p></article>
+</div>
+<section class="card">
+  <h2>Security Status</h2>
+  <p><strong>Attacker Demo Enabled:</strong> <span id="attackerDemoEnabledLabel"><%= securitySettings.attackerDemoEnabled ? 'ON' : 'OFF' %></span></p>
+  <p><strong>Cover Traffic:</strong> <span id="coverTrafficEnabledLabel"><%= securitySettings.coverTrafficEnabled ? 'ON' : 'OFF' %></span></p>
+  <p class="muted">
+    Interval <%= securitySettings.coverTrafficIntervalMs %>ms, Jitter <%= securitySettings.coverTrafficJitterMs %>ms, Ratio <%= securitySettings.coverTrafficRatio %>
+  </p>
+  <p><strong>Attacker Node Connected:</strong> <span id="attackerNodeConnectedLabel"><%= attackerStatus.connected ? 'YES' : 'NO' %></span> (<%= attackerStatus.totalSockets %> socket<%= attackerStatus.totalSockets === 1 ? '' : 's' %>)</p>
+  <div class="row">
+    <a href="/admin/security-settings"><button type="button">Manage Security Settings</button></a>
+    <a href="/admin/attacker-demo"><button type="button">Open Attacker Demo</button></a>
+    <a href="<%= attackerNodeUrl %>" target="_blank" rel="noreferrer"><button type="button">Open Attacker Node URL</button></a>
+  </div>
+</section>
+<section class="card">
+  <h2>Live Alerts</h2>
+  <div id="adminAlerts" class="logbox"></div>
+</section>
+<section class="card">
+  <h2>Recent Incidents</h2>
+  <table>
+    <thead><tr><th>ID</th><th>Type</th><th>Severity</th><th>Reason</th><th>Time</th></tr></thead>
+    <tbody>
+      <% incidents.forEach((i) => { %>
+        <tr><td><%= i.incidentId %></td><td><%= i.type %></td><td><%= i.severity %></td><td><%= i.reason %></td><td><%= new Date(i.createdAt).toLocaleString() %></td></tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>

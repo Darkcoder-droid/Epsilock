@@ -1,0 +1,44 @@
+<h1>Security Settings</h1>
+<p class="muted">Global controls are persisted and pushed to all user nodes live (no restart).</p>
+
+<section class="card">
+  <form id="securitySettingsForm" class="grid two">
+    <label>
+      Attacker Demo Enabled
+      <select name="attackerDemoEnabled" id="attackerDemoEnabled">
+        <option value="true" <%= settings.attackerDemoEnabled ? 'selected' : '' %>>ON</option>
+        <option value="false" <%= !settings.attackerDemoEnabled ? 'selected' : '' %>>OFF</option>
+      </select>
+    </label>
+
+    <label>
+      Cover Traffic Enabled
+      <select name="coverTrafficEnabled" id="coverTrafficEnabled">
+        <option value="true" <%= settings.coverTrafficEnabled ? 'selected' : '' %>>ON</option>
+        <option value="false" <%= !settings.coverTrafficEnabled ? 'selected' : '' %>>OFF</option>
+      </select>
+    </label>
+
+    <label>
+      Cover Traffic Interval (ms)
+      <input type="number" name="coverTrafficIntervalMs" id="coverTrafficIntervalMs" min="100" max="60000" value="<%= settings.coverTrafficIntervalMs %>">
+    </label>
+
+    <label>
+      Cover Traffic Jitter (ms)
+      <input type="number" name="coverTrafficJitterMs" id="coverTrafficJitterMs" min="0" max="60000" value="<%= settings.coverTrafficJitterMs %>">
+    </label>
+
+    <label>
+      Cover Traffic Ratio
+      <input type="number" name="coverTrafficRatio" id="coverTrafficRatio" min="1" max="20" value="<%= settings.coverTrafficRatio %>">
+    </label>
+
+    <div class="row">
+      <button type="submit">Save</button>
+      <button type="button" id="refreshSettingsBtn">Refresh</button>
+    </div>
+  </form>
+
+  <p id="settingsSaveStatus" class="muted">Last updated: <%= settings.updatedAt ? new Date(settings.updatedAt).toLocaleString() : '-' %></p>
+</section>

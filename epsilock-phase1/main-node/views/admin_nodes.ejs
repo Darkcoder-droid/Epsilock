@@ -1,0 +1,24 @@
+<h1>Connected User Nodes</h1>
+<section class="card">
+  <table>
+    <thead><tr><th>Node ID</th><th>User</th><th>Status</th><th>Source IP</th><th>User Agent</th><th>Connected</th><th>Last Seen</th><th>Action</th></tr></thead>
+    <tbody>
+      <% rows.forEach((n) => { %>
+        <tr>
+          <td><code><%= n.nodeId %></code></td>
+          <td><%= n.username %></td>
+          <td><%= n.status %></td>
+          <td><%= n.sourceIp || '-' %></td>
+          <td class="small"><%= n.userAgent || '-' %></td>
+          <td><%= n.connectedAt ? new Date(n.connectedAt).toLocaleString() : '-' %></td>
+          <td><%= n.lastSeenAt ? new Date(n.lastSeenAt).toLocaleString() : '-' %></td>
+          <td>
+            <% if (n.status === 'online') { %>
+              <form method="post" action="/admin/nodes/<%= n.nodeId %>/disconnect"><button type="submit">Disconnect</button></form>
+            <% } else { %>-<% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>

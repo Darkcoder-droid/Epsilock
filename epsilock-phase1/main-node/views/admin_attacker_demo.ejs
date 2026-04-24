@@ -1,0 +1,65 @@
+<h1>Attacker Demo</h1>
+<p class="muted">Cover traffic does not replace encryption. It reduces metadata leakage and timing analysis usefulness.</p>
+<section class="card">
+  <h2>Current Cover Traffic Settings</h2>
+  <p><strong>Attacker Demo Enabled:</strong> <span id="attackerDemoEnabledLabel"><%= securitySettings.attackerDemoEnabled ? 'ON' : 'OFF' %></span></p>
+  <p><strong>Cover Traffic:</strong> <span id="coverTrafficEnabledLabel"><%= coverEnabled ? 'ON' : 'OFF' %></span></p>
+  <p class="muted">
+    Interval: <span id="coverTrafficIntervalMsLabel"><%= securitySettings.coverTrafficIntervalMs %></span>ms,
+    Jitter: <span id="coverTrafficJitterMsLabel"><%= securitySettings.coverTrafficJitterMs %></span>ms,
+    Ratio: <span id="coverTrafficRatioLabel"><%= securitySettings.coverTrafficRatio %></span>
+  </p>
+  <p><a href="/admin/security-settings">Manage in Security Settings</a></p>
+  <form method="post" action="/admin/attacker-demo/clear"><button type="submit">Clear Demo Logs</button></form>
+</section>
+
+<section class="card">
+  <h2>Demo Actions</h2>
+  <form method="post" action="/admin/attacker-demo/send-sample" class="row">
+    <select name="roomId"><% rooms.forEach((r) => { %><option value="<%= r.roomId %>"><%= r.roomId %></option><% }) %></select>
+    <select name="fromUserId"><% users.forEach((u) => { %><option value="<%= u._id %>"><%= u.username %></option><% }) %></select>
+    <select name="toUserId"><% users.forEach((u) => { %><option value="<%= u._id %>"><%= u.username %></option><% }) %></select>
+    <input name="nodeId" placeholder="nodeId" required>
+    <button type="submit">Send Sample Real Message</button>
+  </form>
+  <form method="post" action="/admin/attacker-demo/cover-burst" class="row">
+    <select name="roomId"><% rooms.forEach((r) => { %><option value="<%= r.roomId %>"><%= r.roomId %></option><% }) %></select>
+    <select name="fromUserId"><% users.forEach((u) => { %><option value="<%= u._id %>"><%= u.username %></option><% }) %></select>
+    <select name="toUserId"><% users.forEach((u) => { %><option value="<%= u._id %>"><%= u.username %></option><% }) %></select>
+    <input name="nodeId" placeholder="nodeId" required>
+    <button type="submit">Generate Cover Burst</button>
+  </form>
+</section>
+
+<div class="grid two">
+  <section class="card">
+    <h2>WITHOUT COVER TRAFFIC</h2>
+    <p><strong>Attacker confidence: <%= confidenceWithout %></strong></p>
+    <p>Real messages are easy to isolate.</p>
+    <table>
+      <thead><tr><th>Time</th><th>From</th><th>To</th><th>Size</th><th>Type</th><th>Decrypted (attacker view)</th></tr></thead>
+      <tbody>
+        <% withoutCover.slice(0, 40).forEach((p) => { %>
+          <tr><td><%= new Date(p.createdAt).toLocaleTimeString() %></td><td><%= p.fromUserId || '-' %></td><td><%= p.toUserId || '-' %></td><td><%= p.sizeBytes %></td><td><%= p.type %></td><td class="small"><%= p.decrypted || '-' %></td></tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </section>
+  <section class="card">
+    <h2>WITH COVER TRAFFIC</h2>
+    <p><strong>Attacker confidence: <%= confidenceWith %></strong></p>
+    <p>
+      Mode:
+      <strong id="coverTrafficModeLabel"><%= coverEnabled ? 'MIXED / NOISY MODE ACTIVE' : 'CLEAN / ISOLATABLE MODE (COVER OFF)' %></strong>
+    </p>
+    <p>Cover traffic increases noise, hides timing, and reduces metadata usefulness.</p>
+    <table>
+      <thead><tr><th>Time</th><th>From</th><th>To</th><th>Size</th><th>Type</th><th>Cover</th><th>Decrypted (attacker view)</th></tr></thead>
+      <tbody>
+        <% withCover.slice(0, 40).forEach((p) => { %>
+          <tr><td><%= new Date(p.createdAt).toLocaleTimeString() %></td><td><%= p.fromUserId || '-' %></td><td><%= p.toUserId || '-' %></td><td><%= p.sizeBytes %></td><td><%= p.type %></td><td><%= p.isCover ? 'yes' : 'no' %></td><td class="small"><%= p.decrypted || '-' %></td></tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </section>
+</div>

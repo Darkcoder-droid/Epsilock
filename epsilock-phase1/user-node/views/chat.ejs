@@ -1,0 +1,41 @@
+<h1>User Node Chat</h1>
+<div class="card">
+  <p><strong>User:</strong> <%= user.username %></p>
+  <p><strong>Node:</strong> <code id="nodeId"><%= nodeId %></code></p>
+  <p id="connectionStatus" class="muted">Connecting to secure WebSocket...</p>
+  <div id="statusRows" class="status"></div>
+</div>
+
+<div class="card">
+  <label>Select room</label>
+  <select id="roomSelect">
+    <option value="">Choose room</option>
+    <% rooms.forEach((r) => { %>
+      <option value="<%= r.roomId %>"><%= r.name %> (<%= r.roomId %>)</option>
+    <% }) %>
+  </select>
+  <button id="joinRoomButton" disabled>Join Room</button>
+</div>
+
+<div class="card">
+  <div class="row">
+    <input id="toUserId" placeholder="toUserId (optional for room broadcast)">
+    <input id="messageInput" placeholder="Enter message" disabled>
+    <button id="sendButton" disabled>Send</button>
+  </div>
+</div>
+
+<div class="card">
+  <h3>Incoming Messages</h3>
+  <div id="chatLog" class="chat-log"></div>
+</div>
+
+<script>
+  window.EPSILOCK_USER = {
+    userId: "<%= user._id %>",
+    username: "<%= user.username %>"
+  };
+  window.__CHAT_BOOT = {
+    status: <%- JSON.stringify(status) %>
+  };
+</script>

@@ -1,0 +1,58 @@
+<section class="card">
+  <h2>Connection</h2>
+  <p><strong>Main Node WSS:</strong> <span id="connStatus"><%= state.connected ? 'CONNECTED' : 'DISCONNECTED' %></span></p>
+  <p><strong>Node Auth:</strong> <span id="authStatus"><%= state.authenticated ? 'OK' : 'PENDING' %></span></p>
+  <p><strong>Transport:</strong> <span id="tlsStatus"><%= state.tlsWss %></span></p>
+  <p><strong>Demo leaked key mode:</strong> <span id="leakedKeyMode"><%= state.demoLeakedKeyMode ? 'ON' : 'OFF' %></span></p>
+  <p class="muted">This node only receives demo packet copies intentionally mirrored by main-node.</p>
+</section>
+
+<section class="card">
+  <h2>Traffic Security Mode</h2>
+  <p><strong>Attacker Demo:</strong> <span id="attackerDemoEnabled"><%= state.settings.attackerDemoEnabled ? 'ON' : 'OFF' %></span></p>
+  <p><strong>Cover Traffic:</strong> <span id="coverStatus"><%= state.settings.coverTrafficEnabled ? 'ON' : 'OFF' %></span></p>
+  <p class="muted">Interval <span id="coverInterval"><%= state.settings.coverTrafficIntervalMs %></span>ms, Jitter <span id="coverJitter"><%= state.settings.coverTrafficJitterMs %></span>ms, Ratio <span id="coverRatio"><%= state.settings.coverTrafficRatio %></span></p>
+  <p><strong>Attacker confidence:</strong> <span id="confidence"><%= state.confidence %></span></p>
+  <p id="confidenceNote" class="muted">
+    <%= state.settings.coverTrafficEnabled
+      ? 'Cover traffic adds noise and reduces timing-analysis confidence. It does not make the system unhackable.'
+      : 'Without cover traffic, timing and real-message patterns are easier to isolate.' %>
+  </p>
+</section>
+
+<section class="grid four">
+  <article class="card"><h3>Total Packets</h3><p id="totalPackets"><%= state.stats.totalPackets %></p></article>
+  <article class="card"><h3>Real Packets</h3><p id="realPackets"><%= state.stats.realPackets %></p></article>
+  <article class="card"><h3>Cover Packets</h3><p id="coverPackets"><%= state.stats.coverPackets %></p></article>
+  <article class="card"><h3>Decrypt Success</h3><p id="decryptSuccess"><%= state.stats.decryptionSuccess %></p></article>
+</section>
+
+<section class="card">
+  <div class="row">
+    <h2>Captured Packet Stream</h2>
+    <button id="clearBtn" type="button">Clear Local Demo Buffer</button>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Time</th><th>packetId</th><th>type</th><th>roomId</th><th>fromUserId</th><th>toUserId</th><th>sizeBytes</th><th>isCover</th><th>decrypt</th><th>decrypted preview</th>
+      </tr>
+    </thead>
+    <tbody id="packetRows">
+      <% state.packets.slice(0, 150).forEach((p) => { %>
+        <tr>
+          <td><%= new Date(p.time).toLocaleTimeString() %></td>
+          <td class="mono"><%= p.packetId %></td>
+          <td><%= p.type %></td>
+          <td><%= p.roomId %></td>
+          <td><%= p.fromUserId %></td>
+          <td><%= p.toUserId %></td>
+          <td><%= p.sizeBytes %></td>
+          <td><%= p.isCover ? 'yes' : 'no' %></td>
+          <td><%= p.decryptStatus %></td>
+          <td class="small"><%= p.decryptedPreview || '-' %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>

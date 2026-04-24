@@ -1,0 +1,38 @@
+<h1>Users</h1>
+<section class="card">
+  <h2>Create User</h2>
+  <% if (error) { %><p class="error"><%= error %></p><% } %>
+  <form method="post" action="/admin/users/create" class="row">
+    <input name="username" placeholder="username" required>
+    <input name="password" placeholder="password" type="password" required>
+    <select name="role"><option value="user">user</option><option value="admin">admin</option></select>
+    <button type="submit">Create</button>
+  </form>
+</section>
+<section class="card">
+  <table>
+    <thead><tr><th>Username</th><th>Role</th><th>Blocked</th><th>Reset Password</th><th>Actions</th></tr></thead>
+    <tbody>
+      <% users.forEach((u) => { %>
+        <tr>
+          <td><%= u.username %></td>
+          <td><%= u.role %></td>
+          <td><%= u.blocked ? 'yes' : 'no' %></td>
+          <td>
+            <form method="post" action="/admin/users/<%= u._id %>/reset-password" class="row compact">
+              <input type="password" name="newPassword" placeholder="new password" minlength="8" required>
+              <button type="submit">Update</button>
+            </form>
+          </td>
+          <td>
+            <% if (u.blocked) { %>
+              <form method="post" action="/admin/users/<%= u._id %>/unblock"><button type="submit">Unblock</button></form>
+            <% } else { %>
+              <form method="post" action="/admin/users/<%= u._id %>/block"><button type="submit">Block</button></form>
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>
