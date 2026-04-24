@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/public/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>EPSILOCK Admin Dashboard</h1>
+      <nav>
+        <a href="/admin/create-user">Create User</a>
+        <a href="/admin/sessions">Sessions</a>
+        <form method="post" action="/auth/logout" class="inline-form">
+          <button type="submit">Logout</button>
+        </form>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="panel">
+        <h2>Pair Sender and Receiver</h2>
+        <form method="post" action="/admin/pair-room" class="inline-grid">
+          <label>Sender
+            <select name="senderUserId" required>
+              <% users.filter(u => u.assignedNodeType === 'sender').forEach(u => { %>
+              <option value="<%= u._id %>"><%= u.username %> (<%= u.assignedNodeId %>)</option>
+              <% }) %>
+            </select>
+          </label>
+          <label>Receiver
+            <select name="receiverUserId" required>
+              <% users.filter(u => u.assignedNodeType === 'receiver').forEach(u => { %>
+              <option value="<%= u._id %>"><%= u.username %> (<%= u.assignedNodeId %>)</option>
+              <% }) %>
+            </select>
+          </label>
+          <button type="submit">Create Room</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>Users</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Role</th>
+              <th>Node Type</th>
+              <th>Node ID</th>
+              <th>Online</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.forEach(user => { %>
+            <tr>
+              <td><%= user.username %></td>
+              <td><%= user.role %></td>
+              <td><%= user.assignedNodeType || '-' %></td>
+              <td><%= user.assignedNodeId || '-' %></td>
+              <td><span class="badge <%= onlineUsers.has(String(user._id)) ? 'ok' : 'down' %>"><%= onlineUsers.has(String(user._id)) ? 'online' : 'offline' %></span></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <h2>Node Records</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Node ID</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Endpoint</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% nodes.forEach(node => { %>
+            <tr>
+              <td><%= node.nodeId %></td>
+              <td><%= node.nodeType %></td>
+              <td><span class="badge <%= node.status === 'online' ? 'ok' : 'down' %>"><%= node.status %></span></td>
+              <td><%= node.wsEndpoint %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <h2>Active Session Metadata</h2>
+        <p class="muted">No message content is stored or shown.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Room ID</th>
+              <th>Sender</th>
+              <th>Receiver</th>
+              <th>Status</th>
+              <th>Started</th>
+              <th>Last Activity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% sessions.forEach(session => { %>
+            <tr>
+              <td><%= session.roomId %></td>
+              <td><%= session.senderNodeId %></td>
+              <td><%= session.receiverNodeId %></td>
+              <td><span class="badge <%= session.status === 'active' ? 'ok' : 'down' %>"><%= session.status %></span></td>
+              <td><%= new Date(session.startedAt).toLocaleString() %></td>
+              <td><%= new Date(session.lastActivityAt).toLocaleString() %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </body>
+</html>

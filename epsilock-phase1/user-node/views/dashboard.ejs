@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="/public/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>EPSILOCK User Dashboard</h1>
+      <nav>
+        <a href="/dashboard">Dashboard</a>
+        <form method="post" action="/auth/logout" class="inline-form">
+          <button type="submit">Logout</button>
+        </form>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="panel">
+        <h2>Node Identity</h2>
+        <p><strong>User:</strong> <%= auth.username %></p>
+        <p><strong>Assigned Role:</strong> <%= auth.assignedNodeType %></p>
+        <p><strong>Node Type:</strong> <%= nodeType %></p>
+        <p><strong>Node ID:</strong> <%= nodeId %></p>
+        <p class="muted">No chat history is stored.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Assigned Rooms</h2>
+        <% if (!rooms.length) { %>
+          <p class="muted">No paired room found yet. Ask admin to pair sender and receiver users.</p>
+        <% } else { %>
+          <ul class="room-list">
+            <% rooms.forEach(room => { %>
+              <li>
+                <span><strong><%= room.roomId %></strong> | status: <%= room.status %></span>
+                <a class="btn-link" href="/dashboard/chat/<%= room.roomId %>">Join Chat</a>
+              </li>
+            <% }) %>
+          </ul>
+        <% } %>
+      </section>
+    </main>
+  </body>
+</html>

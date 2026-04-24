@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Session Metadata</title>
+    <link rel="stylesheet" href="/public/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Session Metadata</h1>
+      <nav><a href="/admin/dashboard">Back to Dashboard</a></nav>
+    </header>
+    <main class="container panel">
+      <p class="muted">Metadata only. Message bodies and files are never persisted.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Room</th>
+            <th>Sender User</th>
+            <th>Receiver User</th>
+            <th>Status</th>
+            <th>Started</th>
+            <th>Last Activity</th>
+            <th>Ended</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% sessions.forEach(s => { %>
+          <tr>
+            <td><%= s.roomId %></td>
+            <td><%= s.senderUserId %></td>
+            <td><%= s.receiverUserId %></td>
+            <td><%= s.status %></td>
+            <td><%= new Date(s.startedAt).toLocaleString() %></td>
+            <td><%= new Date(s.lastActivityAt).toLocaleString() %></td>
+            <td><%= s.endedAt ? new Date(s.endedAt).toLocaleString() : '-' %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </main>
+  </body>
+</html>

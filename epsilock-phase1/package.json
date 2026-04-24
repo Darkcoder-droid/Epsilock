@@ -1,0 +1,24 @@
+{
+  "name": "epsilock-phase1",
+  "version": "1.0.0",
+  "description": "EPSILOCK Phase 1 - Multi-node secure WebSocket chat",
+  "main": "main-node/server.js",
+  "scripts": {
+    "start:main": "node main-node/server.js",
+    "start:sender": "NODE_TYPE=sender node user-node/server.js",
+    "start:receiver": "NODE_TYPE=receiver node user-node/server.js",
+    "seed:admin": "node scripts/seedAdmin.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.6.1",
+    "morgan": "^1.10.0",
+    "ws": "^8.18.0",
+    "uuid": "^11.0.2"
+  }
+}

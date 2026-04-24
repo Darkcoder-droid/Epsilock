@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/public/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>EPSILOCK Main Node</h1>
+      <nav>
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/create-user">Create User</a>
+        <a href="/admin/sessions">Sessions</a>
+        <form method="post" action="/auth/logout" class="inline-form">
+          <button type="submit">Logout</button>
+        </form>
+      </nav>
+    </header>
+    <main class="container"><%- body %></main>
+  </body>
+</html>

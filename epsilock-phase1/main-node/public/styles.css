@@ -1,0 +1,113 @@
+:root {
+  --bg: #f2f5f9;
+  --card: #ffffff;
+  --text: #16202a;
+  --muted: #5b6875;
+  --accent: #1155cc;
+  --danger: #b42318;
+  --ok: #027a48;
+  --border: #d0d8e2;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  color: var(--text);
+  background: radial-gradient(circle at top right, #dbe8ff, var(--bg) 55%);
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+}
+
+.topbar nav {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 1rem auto;
+  padding: 0 1rem;
+}
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.auth-card {
+  max-width: 420px;
+  margin-top: 4rem;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.inline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.8rem;
+  align-items: end;
+}
+
+input, select, button {
+  width: 100%;
+  padding: 0.62rem 0.72rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+a { color: var(--accent); text-decoration: none; }
+.error { color: var(--danger); }
+.success { color: var(--ok); }
+.muted { color: var(--muted); }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid var(--border);
+  padding: 0.5rem;
+  font-size: 0.92rem;
+}
+
+.badge {
+  border-radius: 999px;
+  padding: 0.16rem 0.55rem;
+  color: white;
+  font-size: 0.8rem;
+}
+
+.badge.ok { background: var(--ok); }
+.badge.down { background: #6b7280; }
+.inline-form { margin: 0; }
+
+@media (max-width: 720px) {
+  .topbar { flex-direction: column; align-items: flex-start; }
+  table { font-size: 0.82rem; display: block; overflow-x: auto; }
+}

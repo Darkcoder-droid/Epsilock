@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create User</title>
+    <link rel="stylesheet" href="/public/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Create User</h1>
+      <nav><a href="/admin/dashboard">Back to Dashboard</a></nav>
+    </header>
+    <main class="container panel">
+      <% if (error) { %><p class="error"><%= error %></p><% } %>
+      <% if (success) { %><p class="success"><%= success %></p><% } %>
+      <form method="post" action="/admin/create-user" class="stack">
+        <label>Username <input name="username" minlength="3" required /></label>
+        <label>Password <input type="password" name="password" minlength="6" required /></label>
+        <label>Assigned Node Type
+          <select name="assignedNodeType" required>
+            <option value="sender">sender</option>
+            <option value="receiver">receiver</option>
+          </select>
+        </label>
+        <button type="submit">Create User + Node Record</button>
+      </form>
+    </main>
+  </body>
+</html>

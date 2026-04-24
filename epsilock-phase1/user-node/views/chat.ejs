@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Secure Chat</title>
+    <link rel="stylesheet" href="/public/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Secure Chat - <%= room.roomId %></h1>
+      <nav><a href="/dashboard">Back</a></nav>
+    </header>
+
+    <main class="container">
+      <section class="panel">
+        <p><strong>Node:</strong> <%= nodeType %> | <%= nodeId %></p>
+        <p><strong>Secure connection:</strong> <span id="conn-state">connecting...</span></p>
+        <p class="muted">No chat history is stored. Refresh/logout clears messages.</p>
+      </section>
+
+      <section class="panel chat-panel">
+        <div id="messages" class="messages"></div>
+
+        <form id="chat-form" class="stack-inline">
+          <input id="chat-input" placeholder="Type secure message" maxlength="2000" autocomplete="off" required />
+          <button type="submit">Send</button>
+        </form>
+
+        <form id="file-form" class="stack-inline">
+          <input id="file-input" type="file" required />
+          <button type="submit">Share Temporary File</button>
+        </form>
+      </section>
+    </main>
+
+    <script>
+      (() => {
+        const roomId = '<%= room.roomId %>';
+        const myUserId = '<%= auth.sub %>';
+
+        const messagesEl = document.getElementById('messages');
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const fileForm = document.getElementById('file-form');
+        const fileInput = document.getElementById('file-input');
+        const connState = document.getElementById('conn-state');
+
+        const wsProto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const ws = new WebSocket(`${wsProto}//${location.host}/ws/chat`);
+
+        function addMessage(text, kind = 'sys') {
+          const p = document.createElement('p');
+          p.className = `msg ${kind}`;
+          p.textContent = text;
+          messagesEl.appendChild(p);
+          messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+
+        ws.addEventListener('open', () => {
+          connState.textContent = 'secure';
+          ws.send(JSON.stringify({ type: 'join-room', roomId }));
+        });
+
+        ws.addEventListener('close', () => {
+          connState.textContent = 'disconnected';
+          addMessage('Connection closed', 'sys');
+        });
+
+        ws.addEventListener('message', (ev) => {
+          const msg = JSON.parse(ev.data);
+
+          if (msg.type === 'joined-room') {
+            addMessage(`Joined room ${msg.roomId}`, 'sys');
+          }
+
+          if (msg.type === 'chat') {
+            const mine = msg.fromUserId === myUserId;
+            addMessage(`${mine ? 'You' : 'Peer'}: ${msg.text}`, mine ? 'mine' : 'peer');
+          }
+
+          if (msg.type === 'file_offer') {
+            addMessage(`Incoming file: ${msg.fileName} (${Math.round(msg.size / 1024)} KB). Requesting download...`, 'peer');
+            ws.send(JSON.stringify({
+              type: 'file-request',
+              roomId: msg.roomId,
+              fileToken: msg.fileToken,
+              fromUserId: msg.fromUserId
+            }));
+          }
+
+          if (msg.type === 'file_transfer') {
+            const link = document.createElement('a');
+            link.href = `data:${msg.mimeType};base64,${msg.data}`;
+            link.download = msg.fileName || 'download.bin';
+            link.click();
+            addMessage(`Downloaded temporary file: ${msg.fileName}`, 'sys');
+          }
+
+          if (msg.type === 'error') {
+            addMessage(`Error: ${msg.message}`, 'sys');
+          }
+        });
+
+        chatForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const text = chatInput.value.trim();
+          if (!text) return;
+
+          ws.send(JSON.stringify({ type: 'chat', roomId, text }));
+          chatInput.value = '';
+        });
+
+        fileForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const file = fileInput.files[0];
+          if (!file) return;
+
+          const max = <%= Number(process.env.MAX_FILE_BYTES || 1048576) %>;
+          if (file.size > max) {
+            addMessage('File too large for temporary transfer.', 'sys');
+            return;
+          }
+
+          const data = await file.arrayBuffer();
+          let binary = '';
+          const bytes = new Uint8Array(data);
+          for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+          const base64 = btoa(binary);
+
+          ws.send(JSON.stringify({
+            type: 'file-offer',
+            roomId,
+            fileName: file.name,
+            mimeType: file.type || 'application/octet-stream',
+            data: base64
+          }));
+
+          addMessage(`Temporary file offered: ${file.name}`, 'mine');
+          fileInput.value = '';
+        });
+      })();
+    </script>
+  </body>
+</html>

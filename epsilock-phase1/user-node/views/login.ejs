@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= nodeType %> Node Login</title>
+    <link rel="stylesheet" href="/public/styles.css" />
+  </head>
+  <body>
+    <main class="container auth-card">
+      <h1><%= nodeType %> Node Login</h1>
+      <p class="muted">Shared dashboard template for sender/receiver node servers.</p>
+      <% if (error) { %><p class="error"><%= error %></p><% } %>
+      <form method="post" action="/auth/login" class="stack">
+        <label>Username <input name="username" required /></label>
+        <label>Password <input type="password" name="password" required /></label>
+        <button type="submit">Sign In</button>
+      </form>
+    </main>
+  </body>
+</html>

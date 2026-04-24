@@ -1,0 +1,125 @@
+:root {
+  --bg: #f7fbf8;
+  --card: #ffffff;
+  --text: #132117;
+  --muted: #5d6a61;
+  --accent: #05603a;
+  --peer: #e7f4ec;
+  --mine: #d9ebff;
+  --border: #d2ddd5;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Nunito Sans", "Segoe UI", sans-serif;
+  color: var(--text);
+  background: linear-gradient(120deg, #ecf8ee 0%, #f5f7ff 100%);
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--card);
+}
+
+.container {
+  max-width: 960px;
+  margin: 1rem auto;
+  padding: 0 1rem;
+}
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.auth-card {
+  max-width: 420px;
+  margin-top: 5rem;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.stack-inline {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.55rem;
+  margin-top: 0.75rem;
+}
+
+input, button {
+  width: 100%;
+  padding: 0.62rem 0.74rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+button {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.muted { color: var(--muted); }
+.error { color: #ad1a1a; }
+
+.room-list {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.room-list li {
+  margin: 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-link {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.messages {
+  min-height: 260px;
+  max-height: 420px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem;
+  background: #fcfefe;
+}
+
+.msg {
+  margin: 0.4rem 0;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+}
+
+.msg.sys { background: #edf2f7; }
+.msg.peer { background: var(--peer); }
+.msg.mine { background: var(--mine); }
+.inline-form { margin: 0; }
+
+@media (max-width: 720px) {
+  .topbar { flex-direction: column; align-items: flex-start; }
+  .stack-inline { grid-template-columns: 1fr; }
+}
