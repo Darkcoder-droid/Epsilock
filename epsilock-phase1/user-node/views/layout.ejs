@@ -11,15 +11,10 @@
   <% if (bodyView !== 'login') { %>
   <nav class="top-nav">
     <div class="nav-left">
-      <div class="logo-wrap" style="display: flex; align-items: center; gap: 0.75rem;">
-        <img src="/public/images/epsilock_logo.png" alt="Epsilock Logo" style="height: 32px; width: auto; border-radius: 4px;">
-        <span>EPSILOCK_USER</span>
-      </div>
       <div id="wssStatusChat" class="wss-tag status-offline">WSS: DISCONNECTED</div>
     </div>
     <div class="nav-right">
       <div class="mini-profile">
-        <div class="avatar">U</div>
         <div class="profile-info">
           <span class="username"><%= (data && data.user) ? data.user.username : 'User' %></span>
           <span class="role">NODE_LINK</span>
