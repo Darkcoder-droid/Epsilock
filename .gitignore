@@ -16,12 +16,11 @@ pnpm-debug.log*
 .env.local
 .env.*.local
 
-# EPSILOCK Phase 1 local env/certs
-/epsilock-phase1/.env
-/epsilock-phase1/certs/*.pem
-/epsilock-phase1/certs/*.key
-/epsilock-phase1/certs/*.crt
-/epsilock-phase1/certs/*.srl
+# EPSILOCK local env/certs
+/certs/*.pem
+/certs/*.key
+/certs/*.crt
+/certs/*.srl
 
 # Runtime/temp data
 /tmp/

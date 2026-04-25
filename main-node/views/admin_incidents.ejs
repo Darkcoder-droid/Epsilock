@@ -1,0 +1,54 @@
+<h1>Incidents</h1>
+<section class="card">
+  <form method="get" action="/admin/incidents" class="row">
+    <input name="type" placeholder="type" value="<%= filter.type || '' %>">
+    <input name="user" placeholder="user/username" value="<%= filter.user || '' %>">
+    <input name="room" placeholder="room" value="<%= filter.room || '' %>">
+    <select name="severity">
+      <option value="">all severity</option>
+      <option value="low">low</option><option value="medium">medium</option><option value="high">high</option><option value="critical">critical</option>
+    </select>
+    <select name="status">
+      <option value="">all status</option>
+      <option value="open">open</option>
+      <option value="resolved">resolved</option>
+    </select>
+    <button type="submit">Filter</button>
+  </form>
+</section>
+<section class="card cascading-item">
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>ID</th><th>Type</th><th>Severity</th><th>Status</th><th>User</th><th>Room</th><th>Node</th><th>IP</th><th>Geo</th><th>Origin</th><th>User Agent</th><th>Action</th><th>Metadata</th><th>Time</th><th>Resolve</th></tr></thead>
+    <tbody>
+      <% incidents.forEach((i) => { %>
+        <tr>
+          <td style="white-space: nowrap;"><%= i.incidentId %></td>
+          <td><%= i.type %></td>
+          <td><%= i.severity %></td>
+          <td><%= i.status || 'open' %></td>
+          <td><%= i.username || i.userId || '-' %></td>
+          <td><%= i.roomId || '-' %></td>
+          <td><%= i.nodeId || '-' %></td>
+          <td><%= i.sourceIp || '-' %></td>
+          <td><%= i.sourceGeo || '-' %></td>
+          <td><%= i.origin || '-' %></td>
+          <td><%= i.userAgent || '-' %></td>
+          <td><%= i.actionTaken %></td>
+          <td><%= i.metadata ? JSON.stringify(i.metadata) : '-' %></td>
+          <td><%= new Date(i.createdAt).toLocaleString() %></td>
+          <td>
+            <% if (i.status !== 'resolved') { %>
+              <form method="post" action="/admin/incidents/<%= i.incidentId %>/resolve">
+                <button type="submit">Resolve</button>
+              </form>
+            <% } else { %>
+              resolved
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  </div>
+</section>
